@@ -112,3 +112,12 @@ Good
 ```
 
 Also if you're writing Raw queries, (without Eloquent), you must manually filter the rows by `tenant_id`
+
+
+## Reference
+Reference material and some code used/modified from these projects.
+
+[Multi-Tenant package for Laravel4](https://github.com/AuraEQ/laravel-multi-tenant)
+[Multi-Tenancy in Laravel4](http://culttt.com/2014/03/31/multi-tenancy-laravel-4/)
+
+### Multiple Database Support
