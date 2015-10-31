@@ -8,6 +8,13 @@ use Illuminate\Support\ServiceProvider;
 class MultiTenantServiceProvider extends ServiceProvider
 {
 
+	public function boot()
+	{
+		$this->publishes([
+			__DIR__.'/../config/' => config_path(),
+		], 'config');
+	}
+
 	public function register()
 	{
 		App::bind('emedia.tenantManager.tenant', 'App\Tenant');
