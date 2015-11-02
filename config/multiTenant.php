@@ -27,4 +27,6 @@ return [
 	'permissionModel'	=> App\Entities\Auth\Permission::class,
 	'tenantModel'		=> App\Entities\Auth\Tenant::class,
 
+	'invitationsRepo'	=> EMedia\Oxygen\Entities\Invitations\InvitationRepository::class,
+
 ];
