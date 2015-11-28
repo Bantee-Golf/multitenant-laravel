@@ -13,6 +13,12 @@ class TenantManager
 {
 
 	private $tenant;
+	private $enabled;
+
+	public function __construct()
+	{
+		$this->enable();
+	}
 
 	public function setTenantById($id)
 	{
@@ -48,6 +54,21 @@ class TenantManager
 	public function clearTenant()
 	{
 		$this->tenant = null;
+	}
+
+	public function disable()
+	{
+		$this->enabled = false;
+	}
+
+	public function enable()
+	{
+		$this->enabled = true;
+	}
+
+	public function isEnabled()
+	{
+		return $this->enabled;
 	}
 
 }

@@ -14,8 +14,11 @@ class TenantScope implements ScopeInterface {
 
 	public function apply(Builder $builder, Model $model)
 	{
-		$tenant = TenantManager::getTenant();
-		$builder->whereRaw($model->getTenantWhereClause($model->getTenantColumn(), $tenant->id));
+		if (TenantManager::isEnabled())
+		{
+			$tenant = TenantManager::getTenant();
+			$builder->whereRaw($model->getTenantWhereClause($model->getTenantColumn(), $tenant->id));
+		}
 	}
 
 	public function remove(Builder $builder, Model $model)
@@ -23,6 +26,9 @@ class TenantScope implements ScopeInterface {
 		$tenant = TenantManager::getTenant();
 		$query = $builder->getQuery();
 
+		// TODO: the following code needs to be revised
+		// see https://github.com/AuraEQ/laravel-multi-tenant/blob/master/src/AuraIsHere/LaravelMultiTenant/TenantScope.php
+		// this code can't be executed because of the dependency on TenantManager
 		foreach( (array) $query->wheres as $key => $where) {
 			if($this->isTenantConstraint($model, $where, $model->getTenantColumn(), $tenant->id)) {
 				unset($query->wheres[$key]);
@@ -46,9 +52,9 @@ class TenantScope implements ScopeInterface {
 	public function creating(Model $model)
 	{
 		// If the model has had the global scope removed, bail
-		// if (! $model->hasGlobalScope($this) ) {
-		// return;
-		// }
+		if (! $model->hasGlobalScope($this) ) {
+			return;
+		}
 
 		$tenant = TenantManager::getTenant();
 		$model->{$model->getTenantColumn()} = $tenant->id;

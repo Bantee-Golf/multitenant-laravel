@@ -17,7 +17,7 @@ class MultiTenantServiceProvider extends ServiceProvider
 
 	public function register()
 	{
-		App::bind('emedia.tenantManager.tenant', 'App\Tenant');
+		$this->app->bind('emedia.tenantManager.tenant', config('multiTenant.tenantModel'));
 
 		$this->app->singleton('emedia.tenantManager', function () {
 			return $this->app->make('EMedia\MultiTenant\Entities\TenantManager');

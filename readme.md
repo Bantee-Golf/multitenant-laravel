@@ -22,18 +22,21 @@ Add to the list of providers:
 Add to the list of aliases:
 `'TenantManager' => EMedia\MultiTenant\Facades\TenantManager::class,`
 
+### Publish the config file
+
+Publish the config file with the following command.
+```
+php artisan vendor:publish --provider="EMedia\MultiTenant\MultiTenantServiceProvider" --tag=config
+```
 
 ### Add the Tenant Model
 
 Create a new Eloquent model for your Tenant, such as `App\Tenant`.
 
-In your `app\Providers\AppServiceProvider.php`, add bind the Tenant model to the IoC container. This should go in the `register()` function. Replace `App\Tenant` with your Tenant model.
+In your `config/multiTenant.php`, add update the Tenant model namespace if needed.
 
 ```
-	public function register()
-    {
-        App::bind('emedia.tenantManager.tenant', 'App\Tenant');
-    }
+	'tenantModel'		=> App\Entities\Auth\Tenant::class,
 ```
 
 ### Migrations
@@ -87,6 +90,17 @@ Example:
 	$car = Car::create(['name' => 'Nissan GTR']);
 ```
 
+## Excluding Tenant binding
+
+You can disable tenant binding before running some Eloquent queries.
+```
+	TenantManager::disable();
+	$invitations = Invitation::all();
+	TenantManager::enable();
+```
+This will return all the Invitations in above example. **Always** enable the `TenantManager` after running such a query.
+
+
 ## WARNING
 Because of how query scoping is executed in Laravel 5, any `orWhere*` queries must be nested when scoping by Tenant.
 
@@ -114,10 +128,15 @@ Good
 Also if you're writing Raw queries, (without Eloquent), you must manually filter the rows by `tenant_id`
 
 
+## TODO: Roadmap
+
+- Remove disabling the TenantManager and find a solution to run queries for all entities
+- Multiple Database Support
+
+
 ## Reference
 Reference material and some code used/modified from these projects.
 
 [Multi-Tenant package for Laravel4](https://github.com/AuraEQ/laravel-multi-tenant)
 [Multi-Tenancy in Laravel4](http://culttt.com/2014/03/31/multi-tenancy-laravel-4/)
 
-### Multiple Database Support
