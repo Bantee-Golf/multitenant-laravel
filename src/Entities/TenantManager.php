@@ -6,7 +6,6 @@ use EMedia\MultiTenant\Exceptions\TenantInvalidIdException;
 use EMedia\MultiTenant\Exceptions\TenantNotBoundException;
 use EMedia\MultiTenant\Exceptions\TenantNotSetException;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use ReflectionException;
 
@@ -32,7 +31,7 @@ class TenantManager
 	{
 		try
 		{
-			$tenantResolver = App::make('emedia.tenantManager.tenant');
+			$tenantResolver = app('emedia.tenantManager.tenant');
 		}
 		catch (ReflectionException $ex)
 		{
@@ -123,7 +122,7 @@ class TenantManager
 	 */
 	public function allTenants()
 	{
-		$tenantRepo = app(config('multiTenant.tenantRepository'));
+		$tenantRepo = app(config('auth.tenantRepository'));
 		return $tenantRepo->all();
 	}
 

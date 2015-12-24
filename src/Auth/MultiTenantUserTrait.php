@@ -1,22 +1,18 @@
 <?php
 
-
 namespace EMedia\MultiTenant\Auth;
-
-
-use Illuminate\Support\Facades\Config;
 
 trait MultiTenantUserTrait
 {
 
 	public function tenants()
 	{
-		return $this->belongsToMany(Config::get('multiTenant.tenantModel'));
+		return $this->belongsToMany(config('auth.tenantModel'));
 	}
 
 	public function roles()
 	{
-		return $this->belongsToMany(Config::get('multiTenant.roleModel'));
+		return $this->belongsToMany(config('auth.roleModel'));
 	}
 
 	public function hasFirstName()

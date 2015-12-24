@@ -2,7 +2,6 @@
 
 namespace EMedia\MultiTenant\Scoping\Traits;
 
-use App;
 use Illuminate\Database\Eloquent\Model;
 use EMedia\MultiTenant\Scoping\TenantScope;
 
@@ -12,7 +11,7 @@ trait TenantScopedModelTrait
 
 	public static function bootTenantScopedModelTrait()
 	{
-		$tenantScope = App::make('EMedia\MultiTenant\Scoping\TenantScope');
+		$tenantScope = app('EMedia\MultiTenant\Scoping\TenantScope');
 
 		// Add Global scope that will handle all operations except create()
 		static::addGlobalScope($tenantScope);
