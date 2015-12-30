@@ -2,6 +2,7 @@
 
 namespace EMedia\MultiTenant\Entities;
 
+use EMedia\MultiTenant\Exceptions\MultiTenancyNotActiveException;
 use EMedia\MultiTenant\Exceptions\TenantInvalidIdException;
 use EMedia\MultiTenant\Exceptions\TenantNotBoundException;
 use EMedia\MultiTenant\Exceptions\TenantNotSetException;
@@ -14,10 +15,22 @@ class TenantManager
 
 	private $tenant;
 	private $enabled;
+	private $active;
 
 	public function __construct()
 	{
 		$this->enable();
+		$this->active = config('auth.multiTenantActive');
+	}
+
+	/**
+	 * Check if multi-tenancy is activated by user
+	 *
+	 * @throws MultiTenancyNotActiveException
+	 */
+	private function checkForActivation()
+	{
+		if (!$this->active) throw new MultiTenancyNotActiveException();
 	}
 
 	/**
@@ -29,6 +42,7 @@ class TenantManager
 	 */
 	public function setTenantById($id)
 	{
+		$this->checkForActivation();
 		try
 		{
 			$tenantResolver = app('emedia.tenantManager.tenant');
@@ -52,6 +66,7 @@ class TenantManager
 	 */
 	public function setTenant(Model $tenant)
 	{
+		$this->checkForActivation();
 		$this->tenant = $tenant;
 		Session::set('tenant_id', $tenant->id);
 	}
@@ -110,9 +125,25 @@ class TenantManager
 		$this->enabled = true;
 	}
 
+	/**
+	 * Check if the current instance is active or inactive.
+	 * MultiTenancy must be 'active' for it to be enabled or disabled.
+	 *
+	 * @return boolean
+	 */
 	public function isEnabled()
 	{
 		return $this->enabled;
+	}
+
+	/**
+	 * Check if the tenant manager is active for the application
+	 *
+	 * @return boolean
+	 */
+	public function multiTenancyIsActive()
+	{
+		return $this->active;
 	}
 
 	/**
@@ -122,6 +153,7 @@ class TenantManager
 	 */
 	public function allTenants()
 	{
+		$this->checkForActivation();
 		$tenantRepo = app(config('auth.tenantRepository'));
 		return $tenantRepo->all();
 	}

@@ -15,9 +15,4 @@ trait MultiTenantUserTrait
 		return $this->belongsToMany(config('auth.roleModel'));
 	}
 
-	public function hasFirstName()
-	{
-		return (empty($this->name))? false: true;
-	}
-
 }
