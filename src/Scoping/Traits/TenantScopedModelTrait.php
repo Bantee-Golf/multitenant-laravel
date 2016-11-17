@@ -7,7 +7,11 @@ use EMedia\MultiTenant\Scoping\TenantScope;
 
 trait TenantScopedModelTrait
 {
-	// protected $tenant_column = 'tenant_id';
+	
+	public function tenant()
+	{
+		return $this->belongsTo(config('auth.tenantModel'), $this->getTenantColumn());
+	}
 
 	public static function bootTenantScopedModelTrait()
 	{
