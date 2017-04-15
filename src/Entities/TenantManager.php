@@ -68,7 +68,7 @@ class TenantManager
 	{
 		$this->checkForActivation();
 		$this->tenant = $tenant;
-		Session::set('tenant_id', $tenant->id);
+		Session::put('tenant_id', $tenant->id);
 	}
 
 	/**
