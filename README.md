@@ -1,6 +1,7 @@
-# Multi-Tenant Handling Package for Laravel 5
+# Multi-Tenant Handling Package for Laravel 5 / 6
 
 This adds multi-tenant handling capability on a single database.
+
 
 ## How to Install
 
@@ -51,11 +52,11 @@ Eg:
 ```
 	class Car extends Model
     {
-    
+
         protected $tenant_column = ['tenant_id'];   // optional
-    
+
         use TenantScopedModelTrait;
-    
+
     }
 ```
 
@@ -82,10 +83,10 @@ Example:
 ```
 	// return all cars for Tenant 2
 	$cars = Car::all();
-	
+
 	// delete a car, only if it belongs to Tenant 2
 	Car::destroy(['14']);
-	
+
 	// create a car, and bind that to Tenant 2
 	$car = Car::create(['name' => 'Nissan GTR']);
 ```
@@ -109,7 +110,7 @@ Bad
 	// DO NOT use the orWHere queries
     $cars = Car::where('id', 2)->orWhere('id', 5)->get();
     $cars = Car::where('id', 2)->orWhereExists('id', 5)->get();
-    
+
     // DO NOT use this as well
     $carsQuery = Car::where('id', 2);
     $carsQuery = Car::orWhere('id', 5);
@@ -139,4 +140,3 @@ Reference material and some code used/modified from these projects.
 
 [Multi-Tenant package for Laravel4](https://github.com/AuraEQ/laravel-multi-tenant)
 [Multi-Tenancy in Laravel4](http://culttt.com/2014/03/31/multi-tenancy-laravel-4/)
-
