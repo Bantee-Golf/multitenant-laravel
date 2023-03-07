@@ -1,4 +1,4 @@
-# Multi-Tenant Handling Package for Laravel 5 / 6
+# Multi-Tenant Handling Package for Laravel
 
 This adds multi-tenant handling capability on a single database.
 
