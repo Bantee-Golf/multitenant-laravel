@@ -2,6 +2,15 @@
 
 This adds multi-tenant handling capability on a single database.
 
+### Version Compatibility
+
+| Laravel Version | This Package Version | Branch |
+|----------------:|---------------------:|-------:|
+|             v10 |                  2.0 |    2.x |  
+|              v9 |                  1.0 |    1.x |  
+|              v8 |                0.4.0 |    0.0 |  
+|              v7 |                0.3.0 |    0.0 |  
+|              v6 |                0.2.0 |    0.0 |  
 
 ## How to Install
 
