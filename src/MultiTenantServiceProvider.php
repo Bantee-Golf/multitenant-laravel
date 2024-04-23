@@ -2,7 +2,7 @@
 
 namespace EMedia\MultiTenant;
 
-use Illuminate\Support\Facades\App;
+use EMedia\MultiTenant\Entities\TenantManager;
 use Illuminate\Support\ServiceProvider;
 
 class MultiTenantServiceProvider extends ServiceProvider
@@ -20,7 +20,7 @@ class MultiTenantServiceProvider extends ServiceProvider
 		$this->app->bind('emedia.tenantManager.tenant', config('auth.tenantModel'));
 
 		$this->app->singleton('emedia.tenantManager', function () {
-			return $this->app->make('EMedia\MultiTenant\Entities\TenantManager');
+			return $this->app->make(TenantManager::class);
 		});
 	}
 

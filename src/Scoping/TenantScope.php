@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Scope;
 
-class TenantScope implements Scope {
+class TenantScope implements Scope
+{
 
-	private $model;
-
+	protected $model;
 
 	public function apply(Builder $builder, Model $model)
 	{
@@ -57,7 +57,11 @@ class TenantScope implements Scope {
 		}
 
 		$tenant = TenantManager::getTenant();
-		$model->{$model->getTenantColumn()} = $tenant->id;
+
+		// only override the column, if we don't have a specific Tenant ID given.
+		if ($model->{$model->getTenantColumn()} === null) {
+			$model->{$model->getTenantColumn()} = $tenant->id;
+		}
 	}
 
 }
