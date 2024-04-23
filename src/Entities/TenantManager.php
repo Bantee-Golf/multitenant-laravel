@@ -2,16 +2,12 @@
 
 namespace EMedia\MultiTenant\Entities;
 
-use App\Entities\Tenants\TenantsRepository;
 use EMedia\MultiTenant\Exceptions\MultiTenancyNotActiveException;
 use EMedia\MultiTenant\Exceptions\TenantInvalidIdException;
 use EMedia\MultiTenant\Exceptions\TenantNotBoundException;
 use EMedia\MultiTenant\Exceptions\TenantNotSetException;
-use EMedia\MultiTenant\Exceptions\UserDoesNotBelongToTenantException;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\UnauthorizedException;
 use ReflectionException;
 
 class TenantManager
@@ -160,68 +156,6 @@ class TenantManager
 		$this->checkForActivation();
 		$tenantRepo = app(config('auth.tenantRepository'));
 		return $tenantRepo->all();
-	}
-
-	/**
-	 *
-	 * Check if a user belongs to a tenant
-	 *
-	 * @param      $tenant
-	 * @param null $user
-	 *
-	 * @return bool
-	 */
-	public function doesUserBelongToTenant($tenantId, $user = null): bool
-	{
-		$tenantRepo = app(config('auth.tenantRepository'));
-		if (!$user) $user = auth()->user();
-
-		if (!$user) throw new UnauthorizedException('Login again to access this resource.');
-
-		$user = $tenantRepo->getUserByTenant($user->id, $tenantId);
-
-		return $user ? true: false;
-	}
-
-	public function getCurrentTenantForUser($user = null)
-	{
-		/** @var TenantsRepository $tenantRepo */
-		$tenantRepo = app(config('auth.tenantRepository'));
-		if (!$user) $user = auth()->user();
-
-		if (!$user) throw new UnauthorizedException('Login again to access this resource.');
-
-		if (!$user->current_tenant_id) throw new TenantNotSetException("User does not have a default tenant set.");
-
-		return $tenantRepo->getTenantByUser($user->id, $user->current_tenant_id);
-	}
-
-	/**
-	 *
-	 * The the current tenant for user, if not set and get the first tenant, if not, throw an Exception.
-	 *
-	 * @param Authenticatable|null $user
-	 *
-	 * @return \EMedia\Oxygen\Entities\Auth\MultiTenant\Tenant
-	 * @throws TenantNotSetException
-	 * @throws UserDoesNotBelongToTenantException
-	 */
-	public function getClosestTenantForUserOrFail(Authenticatable $user = null)
-	{
-		/** @var TenantsRepository $tenantRepo */
-		$tenantRepo = app(config('auth.tenantRepository'));
-
-		if ($tenant = $this->getCurrentTenantForUser($user)) {
-			return $tenant;
-		}
-
-		if ($tenant = $user->tenants()->first()) {
-			$user->current_tenant_id = $tenant->id;
-			$user->save();
-			return $tenant;
-		}
-
-		throw new UserDoesNotBelongToTenantException("User with ID {$user->id} does not have any tenants.");
 	}
 
 }
